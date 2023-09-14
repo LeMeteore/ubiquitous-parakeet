@@ -1,0 +1,144 @@
+---
+title: Onboarding process
+---
+
+## Recrutement
+
+Échanges avec le recruteur sur [la mission](#) et les [conditions de travail](#). Négociation salariale. Les pièces à fournir pour le processus de recrutement sont:
+
+- Passport
+- Acte de naissance
+- Certificat de domicile
+- Photos d'identité
+- Attestation dernier diplôme obtenu
+
+
+## Visite médicale
+
+
+### La médecine du travail:
+
+Rencontre avec le médécin du travail. Découverte de ce qu'est [le médecin du travail](#) et ses responsabilités. Définition de ce qu'est un [bon environnement de travail](#), des différents types de danger au travail. Exploration rapide de taille, masse, pression artérielle, antécédants médicaux du futur employé.
+
+### Examens à effectuer:
+
+Le futur employé devra se soumettre à une batterie d'examen médicaux, avant de pouvoir prendre son poste. Certains nécessitant des prélèvement sanguins. Deux de ces examens nécessiteront de se rendre en dehors de IPD. 
+
+- Examens effectués à IPD:
+  - foo
+  - bar
+  - baz
+- Examens effectués hors de IPD:
+  - Radio du thorax
+  - ECG
+  
+
+<!-- Serait-il possible de: -->
+
+<!-- - ne pas avoir à aller à la direction RH pour récupérer des bouts de papiers -->
+<!-- - me rendre directement au centre d'analyse -->
+<!-- - donner mon nom ou tout autre info utile -->
+<!-- - faire mes examens sans avoir à trimbaler de la paperasse -->
+
+## Embarquement
+
+### Définition du site
+
+IPD dispose de [plusieurs sites géographiques](#). En fonction du rôle, le futur employé sera envoyé sur un des sites de IPD. Par exemple, toute personne recrutée pour travailler à l'intérieur de la digital factory devra se rendre sur le site se trouvant à [immeuble NSIA](#). 
+
+<!-- J'ai reçu un sms à 21h la veille du 06 septembre m'informant que le lieu de travail n'est pas en ville mais sur la VDN. Et j'ai dû appeler pour avoir l'emplacement exact car rien ne montre de façon claire où se trouve IPD par rapport à NSIA. -->
+
+### L'équipe
+
+Le futur employé commence par rencontrer *les chefs* de la digital factory. [Ces derniers](#) se chargent de lui présenter [les lieux](#), [la mission](#), [les membres](#) de l'équipe. 
+
+### Matériel:
+
+Pour son travail, le futur employé recevra:
+
+- Un ordinateur portable de type Lenovo Thinkpad et configuré avec:
+  - Windows comme système d'exploitation
+  - Microsoft Teams
+  - Microsoft Outlook
+- Un écran
+- Un clavier
+- Une souris
+- Un casque et un micro
+
+### L'environnement:
+
+Le pôle se situant au 3e étage de l'immeuble NSIA sur la VDN dispose de:
+
+- Un open space
+- Une salle de réunion
+- Une salle d'isolation
+- Une salle de prière
+- Une salle de repos
+- Une cuisine avec:
+  - foo
+  - bar
+  - baz
+- Des toilettes
+- 
+
+Au 5e étage du même immeuble, se trouve le refectoire où le futur employé pourra se restaurer à partir de midi. Le menu et les tarifs sont disponible sur [le canal suivant](#).
+
+### Premières tâches:
+
+- Configurer l'environnement de travail
+- Bien comprendre son rôle et ses responsabilités
+- Retrouver les membres de son équipe et échanger avec eux
+- Observer, apprendre, découvrir, comprendre l'environnement de travail
+- Être proactif, éviter d'être passif, éviter de n'avoir rien à faire
+- Documenter tout ce que l'on fait, tout ce que l'on apprend
+- "Je ne sais pas" est une réponse valide
+
+### Prochaines tâches:
+
+- La stack logicielle
+- La forge logicielle
+- Le gestionnaire de tickets
+- Les serveurs
+
+
+<!-- Pour le travail, j'ai reçu un ordinateur portable préconfiguré avec certains logiciels. J'ai également eu droit à un écran, un clavier, une souris et un casque. S'il est vrai que le matériel est de qualité respectable, à mon humble avis, il est possible de faire beaucoup mieux. -->
+
+<!-- Par exemple, quand cela est possible, préconfigurer en fonction des préférences logicielles et matérielles de la nouvelle recrue. Par exemple, aulieu d'acheter le matériel à l'avance, laisser la nouvelle recrue acheter son matériel et ses logiciels lui même (dans la limite du budget disponible). -->
+
+<!-- ## Découverte de l'existant -->
+
+<!-- ### Organigramme, hiérarchie -->
+
+<!-- ### Sites géographiques existants -->
+
+<!-- ### Métiers existants (activités existantes) -->
+
+<!-- ### Matériels existants -->
+
+<!-- ### Logiciels existants -->
+
+<!-- # Processus vers lequel nous pourrions tendre: -->
+
+<!-- - Définition claire et concise de la fiche de poste: tâches, responsabilités, livrables, coéquipiers, salaire, ... -->
+<!-- - Définir à l'avance quel sera le processus de recrutement (étapes, durée par étape, documents requis, ...) -->
+<!-- - Transférer à l'avance, toutes les infos du recruté à qui de droit et éviter au recruté d'avoir à redonner ses informations constamment -->
+<!-- - Personnaliser l'environnement de travail, création de tous les comptes nécessaires, livraison de tous les accès nécessaires (id, mdp, token) et outils nécessaires (bureau, ordinateur portable, téléphone, logiciels, fournitures de bureau, ...) -->
+<!-- - Immerger l'employé dans la vision, la mission de l'entreprise, l'histoire, les fondateurs, les procedures, le code de conduite (remettre à la nouvelle recrue le handbook de l'entreprise) -->
+
+
+<!-- # Pour aller encore plus loin: -->
+
+<!-- - Mise en place d'un wiki d'entreprise, d'un réseau social d'entreprise -->
+<!--   - permettre au nouveau venu de savoir qui est qui (pôles, profils, responsabilités) -->
+<!--   - permettre au nouveau venu de consulter la base de connaissance existante -->
+<!-- - Prises et câbles ethernet ? Permettre la connectivité par câble -->
+<!-- - Prises électriques, multi prises, rallonges électriques ? -->
+<!-- - Plus de tableaux blancs ? Plus de tableaux blancs mobiles ? -->
+<!-- - Coin cuisine ? Frigo, micro ondes, machine à café, couverts, ... -->
+<!-- - En dehors de l'open space ? (salle en isolation pour faire de la viso?) -->
+<!-- - Détente ? (salle de bain, salle de gym, salle de jeu, salle de repos) -->
+<!-- - Casiers de rangement perso ? -->
+<!-- - Organisation d'évènements techs: meetups, portes ouvertes, conférences, ateliers, visites, ... -->
+<!-- - Mise en place des réseaux sociaux IPD orientés tech, présentation de ce qui se fait sur le plan tech à IPD -->
+
+
