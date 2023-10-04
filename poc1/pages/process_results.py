@@ -1,11 +1,8 @@
-import re
-import sqlite3
 import pandas as pd
-import numpy as np
 import streamlit as st
-from utils import clear_session_state
 import pathlib
 import io
+import altair as alt
 
 basedir = pathlib.Path(__file__).parent.parent.parent
 datadir = basedir / "data"
@@ -136,7 +133,6 @@ with st.form("my_form", clear_on_submit=True):
 
       # change O to 0 ??? ask them to take care of this ???
       # df_result.replace('O','0', regex=True, inplace=True)
-      # df_result.astype(np.float64)
       df_result["Patients"] = df_result["Patients"].astype(str)
 
       # color positivity col
@@ -148,8 +144,17 @@ with st.form("my_form", clear_on_submit=True):
 if "df_result" in st.session_state:
    with st.expander("See plot"):
       df = st.session_state.df_result
-      # dataviz ?
-      st.scatter_chart(data=df, x="Patients", y="Ratio", size="Absorbance")
+      # dataviz ? this is how to make a chart with last version of streamlit
+      # st.scatter_chart(data=df, x="Patients", y="Ratio", size="Absorbance")
+
+      # alternative way of scatter plotting (when st.scatter_chart is not available)
+      chart = alt.Chart(df).mark_point().encode(
+         x='Patients',
+         y='Ratio',
+         size='Absorbance',
+         tooltip=['Patients', 'Absorbance', 'Ratio']
+      ).interactive()
+      st.altair_chart(chart, use_container_width=True)
 
    with st.expander("See Tabular datas"):
       st.success("Results processed successfully!")
