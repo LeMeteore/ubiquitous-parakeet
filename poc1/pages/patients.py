@@ -6,6 +6,11 @@ import streamlit as st
 import pathlib
 import datetime
 
+try:
+    import st.rerun as rerun
+except ImportError:
+    import st.experimental_rerun as rerun
+
 basedir = pathlib.Path(__file__).parent.parent.parent
 datadir = basedir / "data"
 database_path = basedir / "database.sqlite"
@@ -13,7 +18,7 @@ database_path = basedir / "database.sqlite"
 st.set_page_config(
     page_title="Patients page",
     layout="wide",
-   initial_sidebar_state="collapsed",
+    initial_sidebar_state="collapsed",
     menu_items=None,
 )
 
@@ -107,7 +112,7 @@ def patients():
                 cur.executemany(query, (ids_to_delete,))
                 con.commit()
                 # https://docs.streamlit.io/library/api-reference/control-flow/st.rerun
-                st.rerun()
+                rerun()
 
     # the menu inside the sidebar
     # with st.sidebar.form("menu_form", clear_on_submit=True):
