@@ -7,9 +7,9 @@ import pathlib
 import datetime
 
 try:
-    import st.rerun as rerun
+    from streamlit import rerun as rerun
 except ImportError:
-    import st.experimental_rerun as rerun
+    from streamlit import experimental_rerun as rerun
 
 basedir = pathlib.Path(__file__).parent.parent.parent
 datadir = basedir / "data"
