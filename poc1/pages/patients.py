@@ -47,7 +47,10 @@ def patients():
     con = st.session_state.con
 
     # patient form insertion
-    with st.expander("Add"):
+    with st.expander("Import from Excel file"):
+        st.write("## Import")
+
+    with st.expander("Add with form"):
         st.write("## Patient creation")
         with st.form("creation_form", clear_on_submit=True):
             # patient form
@@ -101,15 +104,17 @@ def patients():
                 },
             )
             #
+            ids_to_rm = edited_df[edited_df["Delete"]]["eid"]
+            ids_to_rm = [(i,) for i in ids_to_rm]
             delete = st.form_submit_button("Delete")
-            if delete:
+            if delete and len(ids_to_rm) != 0:
                 cur = st.session_state.cur
                 con = st.session_state.con
                 # selected_rows = edited_df[edited_df.Select]
-                ids_to_delete = tuple(edited_df[edited_df["Delete"]]["eid"])
+
                 # delete from patients where ids in
                 query = "delete from patients where eid = ?"
-                cur.executemany(query, (ids_to_delete,))
+                cur.executemany(query, ids_to_rm)
                 con.commit()
                 # https://docs.streamlit.io/library/api-reference/control-flow/st.rerun
                 rerun()
