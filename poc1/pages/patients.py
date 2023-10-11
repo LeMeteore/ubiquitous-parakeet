@@ -43,6 +43,20 @@ if "con" not in st.session_state:
     con = init_connection()
     st.session_state.con = con
 
+def create_patients_table():
+    con = st.session_state.con
+    with contextlib.closing(con.cursor()) as cur:
+        cur.execute("""
+        create table if not exists patients(
+        eid integer primary key,
+        firstname varchar(50) not null,
+        lastname varchar(50) not null,
+        age integer not null,
+        sex varchar(50) not null,
+        created varchar(50) not null
+        );
+        """)
+        con.commit()
 
 def patients():
     # patient form insertion
