@@ -73,7 +73,7 @@ def patients():
                 firstname = st.text_input("Firstname")
                 lastname = st.text_input("Lastname")
             with c1:
-                age = st.number_input('Age', placeholder='00', step=1, min_value=1)
+                age = st.number_input('Age', value=1, step=1, min_value=1)
                 sex = st.selectbox(
                     'Sex',
                     ('Male', 'Female')
