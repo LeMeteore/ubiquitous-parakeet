@@ -43,6 +43,7 @@ if "con" not in st.session_state:
     con = init_connection()
     st.session_state.con = con
 
+@st.cache_resource
 def create_patients_table():
     con = st.session_state.con
     with contextlib.closing(con.cursor()) as cur:
@@ -147,4 +148,5 @@ def patients():
         )
 
 if __name__ == "__main__":
+    create_patients_table()
     patients()
