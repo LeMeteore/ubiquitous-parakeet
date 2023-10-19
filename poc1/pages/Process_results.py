@@ -14,6 +14,19 @@ st.set_page_config(
    menu_items=None,
 )
 
+multi = '''## Processing of returned results
+
+This form was built _specifically_ for the scientists at the immunology lab.
+
+It will help mapping **the results** list returned by the spectrometer, to **the patients** list contained inside the PCR plate plan.
+
+
+First, upload an Excel file containing your PCR plate plan. Next, upload the Excel file containing the results. The files should respect the following formats:
+
+_TODO: print the required format for the inputs_
+'''
+st.markdown(multi)
+
 @st.cache_data
 def convert_to_csv(df):
    # IMPORTANT: Cache the conversion to prevent computation on every rerun
