@@ -85,14 +85,25 @@ def patients():
             # patient form
             c1, c2 = st.columns(2)
             with c2:
-                firstname = st.text_input("Firstname")
-                lastname = st.text_input("Lastname")
+                firstname = st.text_input("Firstname",
+                                      placeholder="Firstname",
+                                      label_visibility="collapsed")
+                lastname = st.text_input("Lastname",
+                                      placeholder="Lastname",
+                                      label_visibility="collapsed")
+
             with c1:
-                age = st.number_input('Age', value=1, step=1, min_value=1)
-                sex = st.selectbox(
-                    'Sex',
-                    ('Male', 'Female')
-                )
+                age = st.number_input("Age",
+                                      step=1, min_value=1,
+                                      value=None,
+                                      placeholder="Patient age",
+                                      label_visibility="collapsed")
+                sex = st.selectbox("Patient sex",
+                                   ("Male", "Female"),
+                                   index=None,
+                                   placeholder="Patient sex",
+                                   label_visibility="collapsed")
+
             submit_button_form = st.form_submit_button("Submit")
             if submit_button_form:
                 con = st.session_state.con
