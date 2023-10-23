@@ -1,4 +1,6 @@
 import streamlit as st
+
+# I should probably define the same thing but for other types of plates plan
 well_names = [
     "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12",
     "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12",
@@ -47,30 +49,33 @@ def plate_type_form():
                                   placeholder="Number of whites",
                                   label_visibility="collapsed")
         nb_pos = st.number_input("Number of positives",
-                               step=1, min_value=1,
-                               value=None,
-                               placeholder="Number of positives",
-                               label_visibility="collapsed")
+                                 step=1, min_value=1,
+                                 value=None,
+                                 placeholder="Number of positives",
+                                 label_visibility="collapsed")
         nb_negs = st.number_input("Number of negatives",
-                                step=1, min_value=1,
-                                value=None,
-                                placeholder="Number of negatives",
-                                label_visibility="collapsed")
+                                  step=1, min_value=1,
+                                  value=None,
+                                  placeholder="Number of negatives",
+                                  label_visibility="collapsed")
         with col5:
             wells_whites = st.multiselect("Location for whites",
-                                         options=well_names,
-                                         placeholder="Locations for whites",
-                                         max_selections=nb_whites,
-                                         label_visibility="collapsed")
+                                          options=well_names,
+                                          placeholder="Locations for whites",
+                                          max_selections=nb_whites,
+                                          label_visibility="collapsed")
 
             wells_pos = st.multiselect("Location for positives",
-                                      options=well_names,
-                                      placeholder="Locations for positives",
-                                      max_selections=nb_pos,
-                                      label_visibility="collapsed")
+                                       options=well_names,
+                                       placeholder="Locations for positives",
+                                       max_selections=nb_pos,
+                                       label_visibility="collapsed")
             wells_negs = st.multiselect("Location for negatives",
-                                      options=well_names,
-                                      placeholder="Location for for negatives",
-                                      max_selections=nb_negs,
-                                      label_visibility="collapsed")
-    return type_, nb_cols, nb_rows, names_cols, names_rows, nb_whites, nb_pos, nb_negs
+                                        options=well_names,
+                                        placeholder="Location for for negatives",
+                                        max_selections=nb_negs,
+                                        label_visibility="collapsed")
+    return (type_, nb_cols, nb_rows,
+            names_cols, names_rows,
+            nb_whites, nb_pos, nb_negs,
+            wells_whites, wells_pos, wells_negs)
