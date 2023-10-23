@@ -1,4 +1,5 @@
 import re
+import io
 import string
 import streamlit as st
 import pandas as pd
@@ -69,3 +70,10 @@ def save_dataframe(df, filepath):
     # change everything to float
     df = df.astype(np.float64)
     df.to_parquet(filepath)
+
+
+def convert_to_excel(df):
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer) as writer:
+       df.to_excel(writer)
+    return buffer
