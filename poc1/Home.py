@@ -8,6 +8,9 @@ st.set_page_config(
     menu_items=None,
 )
 
+if "con" not in st.session_state:
+    con = init_connection(database_path)
+    st.sesstion_state = con
 
 def run():
     st.write("# Welcome :tulip::cherry_blossom::rose::hibiscus::sunflower::blossom:")
@@ -22,5 +25,4 @@ To find more informations, please, follow this [link](#)
     st.markdown(multi)
 
 if __name__ == "__main__":
-    init_connection(database_path)
     run()
