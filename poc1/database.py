@@ -13,8 +13,6 @@ def init_connection(database_path):
     con = sqlite3.connect(database_path, check_same_thread=False)
     con.execute("PRAGMA foreign_keys = 1")
     # con.row_factory = dict_factory
-    if "con" not in st.session_state:
-        st.session_state.con = con
 
     # create one table plate_types
     with contextlib.closing(con.cursor()) as cur:
@@ -71,6 +69,7 @@ def init_connection(database_path):
         """)
         con.commit()
 
+    return con
 
 def insert_plate_type(con, params):
     query = """
@@ -98,3 +97,6 @@ def list_plate_types(row_factory=None):
     with contextlib.closing(con.cursor()) as cur:
         cur.execute("select eid, type from plate_types")
         return cur.fetchall()
+
+if __name__ == "__main__":
+    init_connection(database_path)
