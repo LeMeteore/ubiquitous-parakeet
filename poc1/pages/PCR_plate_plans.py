@@ -17,9 +17,14 @@ st.set_page_config(
     menu_items=None,
 )
 
+if "con" not in st.session_state:
+    con = init_connection(database_path)
+    st.session_state.con = con
+
 def run():
     st.write("### PCR plate plans management")
     tab1, tab2 = st.tabs(["Types", "Plates"])
+    con = st.session_state.con
     with tab1:
         st.markdown("#### This page will help you create and list _types_ of PCR plates")
         with st.expander("Form to create types of plates"):
@@ -29,16 +34,15 @@ def run():
                     wells_whites, wells_pos, wells_negs = plate_type_form()
                 submit = st.form_submit_button("Submit")
                 if submit and type_ != "":
-                    con = st.session_state.con
                     created = datetime.datetime.now().strftime("%Y/%m/%d")
                     params = (type_, nb_cols, nb_rows, names_cols, names_rows,
                               nb_whites, nb_pos, nb_negs,
-                              wells_white, wells_pos, wells_negs,
+                              " ".join(wells_whites), " ".join(wells_pos), " ".join(wells_negs),
                               created)
                     insert_plate_type(con, params)
 
         with st.expander("Available types of plates"):
-            df = pd.read_sql("select * from plate_types;", st.session_state.con)
+            df = pd.read_sql("select * from plate_types;", con)
             st.dataframe(df)
 
     with tab2:
@@ -63,5 +67,4 @@ def run():
 
 
 if __name__ == "__main__":
-    init_connection(database_path)
     run()
