@@ -1,21 +1,15 @@
-import re
-import io
 import sqlite3
 import pandas as pd
-import numpy as np
 import streamlit as st
-import pathlib
 import datetime
 import contextlib
+from database import init_connection, database_path
+from utils import convert_to_excel
 
 try:
     from streamlit import rerun as rerun
 except ImportError:
     from streamlit import experimental_rerun as rerun
-
-basedir = pathlib.Path(__file__).parent.parent.parent
-datadir = basedir / "data"
-database_path = basedir / "database.sqlite"
 
 st.set_page_config(
     page_title="Patients page",
@@ -24,40 +18,8 @@ st.set_page_config(
     menu_items=None,
 )
 
-
-def convert_to_excel(df):
-    buffer = io.BytesIO()
-    with pd.ExcelWriter(buffer) as writer:
-       df.to_excel(writer)
-    return buffer
-
-st.write("# Patients management")
-
-# Initialize connection.
-# Uses st.experimental_singleton to only run once.
-@st.cache_resource
-def init_connection():
-    return sqlite3.connect(database_path, check_same_thread=False)
-
 if "con" not in st.session_state:
-    con = init_connection()
-    st.session_state.con = con
-
-@st.cache_resource
-def create_patients_table():
-    con = st.session_state.con
-    with contextlib.closing(con.cursor()) as cur:
-        cur.execute("""
-        create table if not exists patients(
-        eid integer primary key,
-        firstname varchar(50) not null,
-        lastname varchar(50) not null,
-        age integer not null,
-        sex varchar(50) not null,
-        created varchar(50) not null
-        );
-        """)
-        con.commit()
+    init_connection(database_path)
 
 def patients():
     # patient form insertion
@@ -118,7 +80,7 @@ def patients():
     # patient list
     with st.expander("List"):
         con = st.session_state.con
-        df = pd.read_sql("SELECT * from patients", con)
+        df = pd.read_sql("SELECT * from patients", st.session_state.con)
         df["Delete"] = pd.Series([False] * df.shape[0], dtype=bool)
         st.write("## Patients list")
         with st.form("deletion_form", clear_on_submit=True):
@@ -159,5 +121,4 @@ def patients():
         )
 
 if __name__ == "__main__":
-    create_patients_table()
     patients()
