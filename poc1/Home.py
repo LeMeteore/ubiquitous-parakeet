@@ -1,5 +1,5 @@
 import streamlit as st
-from database import init_connection, database_path, create_plate_types_table, create_plates_table
+from database import init_connection, database_path
 
 st.set_page_config(
     page_title="Home page",
@@ -22,6 +22,5 @@ To find more informations, please, follow this [link](#)
     st.markdown(multi)
 
 if __name__ == "__main__":
-    create_plate_types_table()
-    create_plates_table()
+    init_connection(database_path)
     run()
