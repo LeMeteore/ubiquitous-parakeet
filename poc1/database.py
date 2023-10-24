@@ -50,6 +50,7 @@ def init_connection(database_path):
         eid integer primary key,
         type_eid integer not null,
         status text check(status IN ('empty','filled','processed')) NOT NULL DEFAULT 'empty',
+        created varchar(50) not null,
         FOREIGN KEY(type_eid) REFERENCES plate_types(eid)
         );
         """)
@@ -65,6 +66,19 @@ def init_connection(database_path):
         age integer not null,
         sex varchar(50) not null,
         created varchar(50) not null
+        );
+        """)
+        con.commit()
+
+    # create patients table
+    with contextlib.closing(con.cursor()) as cur:
+        cur.execute("""
+        create table if not exists plate_patients(
+        eid integer primary key,
+        plate_eid integer not null,
+        patient_eid integer not null,
+        FOREIGN KEY(plate_eid) REFERENCES plates(eid),
+        FOREIGN KEY(patient_eid) REFERENCES patients(eid)
         );
         """)
         con.commit()
@@ -97,6 +111,26 @@ def list_plate_types(row_factory=None):
     with contextlib.closing(con.cursor()) as cur:
         cur.execute("select eid, type from plate_types")
         return cur.fetchall()
+
+def list_patients(row_factory=None):
+    con = st.session_state.con
+    if row_factory:
+        con.row_factory = row_factory
+    with contextlib.closing(con.cursor()) as cur:
+        cur.execute("select eid, firstname || ' ' || lastname as fullname from patients")
+        return cur.fetchall()
+
+def insert_plate(con, params):
+    first_query = """
+    insert into plates(
+    type_eid,
+    status,
+    created)
+    values (?, ?, ?)
+    """
+    with contextlib.closing(con.cursor()) as cur:
+        cur.execute(first_query, params)
+        con.commit()
 
 if __name__ == "__main__":
     init_connection(database_path)
