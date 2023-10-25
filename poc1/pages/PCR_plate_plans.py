@@ -36,7 +36,7 @@ def run():
                     nb_whites, nb_pos, nb_negs, \
                     wells_whites, wells_pos, wells_negs = plate_type_form()
                 submit = st.form_submit_button("Submit")
-                if submit and type_ != "":
+                if submit and type_ != "": # what are all the mandatory fields ?
                     created = datetime.datetime.now().strftime("%Y/%m/%d")
                     params = (type_, nb_cols, nb_rows, names_cols, names_rows,
                               nb_whites, nb_pos, nb_negs,
@@ -55,7 +55,7 @@ def run():
             with st.form("plate_form", clear_on_submit=True):
                 type_ = plate_form()
                 submit = st.form_submit_button("Submit")
-                if submit and type_ != "":
+                if submit and type_:
                     created = datetime.datetime.now().strftime("%Y/%m/%d")
                     status = "empty"
                     params = (type_, status, created)
