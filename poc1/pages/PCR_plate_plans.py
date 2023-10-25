@@ -12,6 +12,11 @@ from database import list_plate_types, list_patients
 from database import insert_plate_type, insert_plate
 from forms import plate_type_form, plate_form, plate_patients_form
 
+try:
+    from streamlit import rerun as rerun
+except ImportError:
+    from streamlit import experimental_rerun as rerun
+
 
 st.set_page_config(
     page_title="PCR plate plans page",
@@ -26,53 +31,51 @@ if "con" not in st.session_state:
 
 def run():
     st.write("### PCR plate plans management")
-    tab1, tab2 = st.tabs(["Types", "Plates"])
     con = st.session_state.con
-    with tab1:
-        st.markdown("#### This page will help you create and list _types_ of PCR plates")
-        with st.expander("Form to create types of plates"):
-            with st.form("plate_type_form", clear_on_submit=True):
-                type_, nb_cols, nb_rows, names_cols, names_rows, \
-                    nb_whites, nb_pos, nb_negs, \
-                    wells_whites, wells_pos, wells_negs = plate_type_form()
-                submit = st.form_submit_button("Submit")
-                if submit and type_ != "": # what are all the mandatory fields ?
-                    created = datetime.datetime.now().strftime("%Y/%m/%d")
-                    params = (type_, nb_cols, nb_rows, names_cols, names_rows,
-                              nb_whites, nb_pos, nb_negs,
-                              " ".join(wells_whites), " ".join(wells_pos), " ".join(wells_negs),
-                              created)
-                    insert_plate_type(con, params)
+    st.markdown("#### This page will help you create & list PCR plates")
+    con = st.session_state.con
+    with st.expander("Create a plate"):
+        with st.form("plate_form", clear_on_submit=True):
+            type_, description = plate_form()
+            submit = st.form_submit_button("Submit")
+            if submit and type_ and description:
+                created = datetime.datetime.now().strftime("%Y/%m/%d")
+                status = "empty"
+                params = (type_, description, status, created)
+                insert_plate(con, params)
 
-        with st.expander("Available types of plates"):
-            df = pd.read_sql("select * from plate_types;", con)
-            st.dataframe(df)
+    with st.expander("Add patients inside plate "):
+        with st.form("patients_form", clear_on_submit=True):
+            plate_eid, patients = plate_patients_form()
+            submit = st.form_submit_button("Submit")
+            if submit and plate_eid and patients:
+                st.write(plate_eid)
+                st.write(patients)
 
-    with tab2:
-        st.markdown("#### This page will help you create & list PCR plates")
-        con = st.session_state.con
-        with st.expander("Create a plate"):
-            with st.form("plate_form", clear_on_submit=True):
-                type_, description = plate_form()
-                submit = st.form_submit_button("Submit")
-                if submit and type_ and description:
-                    created = datetime.datetime.now().strftime("%Y/%m/%d")
-                    status = "empty"
-                    params = (type_, description, status, created)
-                    insert_plate(con, params)
+    with st.expander("List plates"):
+        df = pd.read_sql("select * from plates;", con)
+        df["List patients"] = pd.Series([False] * df.shape[0], dtype=bool)
+        with st.form("plate_patient_edit_form", clear_on_submit=True):
+             edited_df = st.data_editor(
+                 df,
+                 use_container_width=True,
+                 hide_index=True,
+                 column_config={
+                     "List patients": st.column_config.CheckboxColumn(
+                         "List patients?",
+                         help="Display plate patients",
+                         default=False,
+                     )
+                 },
+             )
 
-        with st.expander("Add patients inside plate "):
-            with st.form("patients_form", clear_on_submit=True):
-                plate_eid, patients = plate_patients_form()
-                submit = st.form_submit_button("Submit")
-                if submit and plate_eid and patients:
-                    st.write(plate_eid)
-                    st.write(patients)
-
-        with st.expander("List plates"):
-            df = pd.read_sql("select * from plates;", con)
-            st.dataframe(df)
-
+             plate_eid = edited_df[edited_df["List patients"]]["eid"]
+             plate_desc = edited_df[edited_df["List patients"]]["description"]
+             show = st.form_submit_button("Show plate patients")
+             if show and len(plate_eid) == 1:
+                 st.write(f"List of patients for plate name: {plate_desc}")
+                 st.write(plate_eid)
+                 # select all patients where plate eid equalts plate_eid
 
 if __name__ == "__main__":
     run()
