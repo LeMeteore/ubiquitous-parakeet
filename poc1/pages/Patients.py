@@ -34,7 +34,7 @@ def patients():
                 help="Enter an Excel file containing patients list"
             )
             submit_button_form = st.form_submit_button("Submit file")
-            if submit_button_form:
+            if submit_button_form and input_file:
                 columns = ["firstname", "lastname", "age", "sex"]
                 dfp = pd.read_excel(input_file, sheet_name="Patients", header=None, names=columns)
                 now = datetime.datetime.now().strftime("%Y/%m/%d")
@@ -68,7 +68,8 @@ def patients():
                                    label_visibility="collapsed")
 
             submit_button_form = st.form_submit_button("Submit")
-            if submit_button_form:
+            # submit only if all fields are filled ???
+            if submit_button_form and ( age and sex and lastname and firstname):
                 con = st.session_state.con
                 now = datetime.datetime.now().strftime("%Y/%m/%d")
                 query = """
