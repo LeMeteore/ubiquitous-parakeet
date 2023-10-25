@@ -49,6 +49,7 @@ def init_connection(database_path):
         create table if not exists plates(
         eid integer primary key,
         type_eid integer not null,
+        description text not null, -- a little description to help recognize the plate
         status text check(status IN ('empty','filled','processed')) NOT NULL DEFAULT 'empty',
         created varchar(50) not null,
         FOREIGN KEY(type_eid) REFERENCES plate_types(eid)
@@ -124,9 +125,10 @@ def insert_plate(con, params):
     first_query = """
     insert into plates(
     type_eid,
+    description,
     status,
     created)
-    values (?, ?, ?)
+    values (?, ?, ?, ?)
     """
     with contextlib.closing(con.cursor()) as cur:
         cur.execute(first_query, params)

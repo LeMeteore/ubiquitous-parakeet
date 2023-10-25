@@ -82,7 +82,6 @@ def plate_type_form():
             wells_whites, wells_pos, wells_negs)
 
 def plate_form():
-    # patients = dict(list_patients())
     plate_types = dict(list_plate_types())
     type_ = st.selectbox("Type of the plate",
                          options=plate_types,
