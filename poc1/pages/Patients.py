@@ -19,7 +19,7 @@ st.set_page_config(
 )
 
 if "con" not in st.session_state:
-    init_connection(database_path)
+    con = init_connection(database_path)
     st.session_state.con = con
 
 def patients():
