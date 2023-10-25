@@ -121,6 +121,14 @@ def list_patients(row_factory=None):
         cur.execute("select eid, firstname || ' ' || lastname as fullname from patients")
         return cur.fetchall()
 
+def list_empty_plates(row_factory=None):
+    con = st.session_state.con
+    if row_factory:
+        con.row_factory = row_factory
+    with contextlib.closing(con.cursor()) as cur:
+        cur.execute("select eid, description from plates where status is 'empty'")
+        return cur.fetchall()
+
 def insert_plate(con, params):
     first_query = """
     insert into plates(

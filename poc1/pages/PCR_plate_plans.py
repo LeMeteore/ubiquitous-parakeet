@@ -10,7 +10,7 @@ import contextlib
 from database import init_connection, database_path
 from database import list_plate_types, list_patients
 from database import insert_plate_type, insert_plate
-from forms import plate_type_form, plate_form
+from forms import plate_type_form, plate_form, plate_patients_form
 
 
 st.set_page_config(
@@ -53,20 +53,21 @@ def run():
         con = st.session_state.con
         with st.expander("Create a plate"):
             with st.form("plate_form", clear_on_submit=True):
-                type_ = plate_form()
+                type_, description = plate_form()
                 submit = st.form_submit_button("Submit")
-                if submit and type_:
+                if submit and type_ and description:
                     created = datetime.datetime.now().strftime("%Y/%m/%d")
                     status = "empty"
-                    params = (type_, status, created)
+                    params = (type_, description, status, created)
                     insert_plate(con, params)
 
         with st.expander("Add patients inside plate "):
             with st.form("patients_form", clear_on_submit=True):
-
+                plate_eid, patients = plate_patients_form()
                 submit = st.form_submit_button("Submit")
-                if submit and type_ != "":
-                    st.write("")
+                if submit and plate_eid and patients:
+                    st.write(plate_eid)
+                    st.write(patients)
 
         with st.expander("List plates"):
             df = pd.read_sql("select * from plates;", con)

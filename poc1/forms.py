@@ -1,5 +1,5 @@
 import streamlit as st
-from database import list_patients, list_plate_types
+from database import list_patients, list_plate_types, list_empty_plates
 
 # I should probably define the same thing but for other types of plates plan
 well_names = [
@@ -89,11 +89,27 @@ def plate_form():
                          index=None,
                          placeholder="The type for your plate ?",
                          label_visibility="collapsed")
+    description = st.text_input("Plate description",
+                                placeholder="Plate description",
+                                label_visibility="collapsed")
+
+    return type_, description
+
+def plate_patients_form():
+    empty_plates = dict(list_empty_plates())
+    patients = dict(list_patients())
+    plate_eid = st.selectbox("Plate eid",
+                              options=empty_plates,
+                              format_func=lambda key: empty_plates[key],
+                              index=None,
+                              placeholder="Insert patient in which plate plan ?",
+                              label_visibility="collapsed")
+
     # # I should retrieve the max_nb_patients the plan can take
     # # info available with the type of plate
-    # patients = st.multiselect("Patients",
-    #                           options=patients,
-    #                           format_func=lambda key:patients[key],
-    #                           placeholder="Add patients",
-    #                           label_visibility="collapsed")
-    return type_
+    patients = st.multiselect("Patients",
+                              options=patients,
+                              format_func=lambda key:patients[key],
+                              placeholder="Add patients",
+                              label_visibility="collapsed")
+    return plate_eid, patients
