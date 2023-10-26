@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 import pathlib
 import contextlib
+import numpy as np
 
 basedir = pathlib.Path(__file__).parent.parent
 datadir = basedir / "data"
@@ -10,6 +11,8 @@ database_path = basedir / "database.sqlite"
 
 @st.cache_resource
 def init_connection(database_path):
+    # https://stackoverflow.com/questions/38753737/inserting-numpy-integer-types-into-sqlite-with-python3
+    sqlite3.register_adapter(np.int64, lambda val: int(val))
     con = sqlite3.connect(database_path, check_same_thread=False)
     con.execute("PRAGMA foreign_keys = 1")
     # con.row_factory = dict_factory
@@ -141,6 +144,31 @@ def insert_plate(con, params):
     with contextlib.closing(con.cursor()) as cur:
         cur.execute(first_query, params)
         con.commit()
+
+def insert_plate_patients(con, params):
+    query = """
+    insert into plate_patients (
+    plate_eid, patient_eid
+    )
+    values (?, ?)
+    """
+    with contextlib.closing(con.cursor()) as cur:
+        cur.executemany(query, params)
+        con.commit()
+
+def list_plate_patients(con, plate_eid, row_factory=None):
+    if row_factory:
+        con.row_factory = row_factory
+    query = """
+    select p.eid, p.firstname, p.lastname, p.age, p.sex from patients p
+    join plate_patients plp
+    on p.eid = plp.patient_eid
+    where plp.plate_eid = :peid;
+    """
+    with contextlib.closing(con.cursor()) as cur:
+        cur.execute(query, {'peid': plate_eid})
+        return cur.fetchall()
+
 
 if __name__ == "__main__":
     init_connection(database_path)

@@ -9,7 +9,7 @@ import datetime
 import contextlib
 from database import init_connection, database_path
 from database import list_plate_types, list_patients
-from database import insert_plate_type, insert_plate
+from database import insert_plate_type, insert_plate, insert_plate_patients, list_plate_patients
 from forms import plate_type_form, plate_form, plate_patients_form
 
 try:
@@ -49,8 +49,8 @@ def run():
             plate_eid, patients = plate_patients_form()
             submit = st.form_submit_button("Submit")
             if submit and plate_eid and patients:
-                st.write(plate_eid)
-                st.write(patients)
+                params = tuple([(plate_eid, p) for p in patients])
+                insert_plate_patients(con, params)
 
     with st.expander("List plates"):
         df = pd.read_sql("select * from plates;", con)
@@ -69,13 +69,19 @@ def run():
                  },
              )
 
-             plate_eid = edited_df[edited_df["List patients"]]["eid"]
+             plate_eid = edited_df[edited_df["List patients"]]["eid"] # this is a Serie object containing an np.int64
              plate_desc = edited_df[edited_df["List patients"]]["description"]
              show = st.form_submit_button("Show plate patients")
              if show and len(plate_eid) == 1:
-                 st.write(f"List of patients for plate name: {plate_desc}")
-                 st.write(plate_eid)
-                 # select all patients where plate eid equalts plate_eid
+                 st.write(f"List of patients for plate name: {plate_desc.iloc[0]}")
+                 plate_eid = plate_eid.iloc[0]
+                 patients = list_plate_patients(con, plate_eid)
+                 patients_df = pd.DataFrame(
+                     patients,
+                     columns=["eid", "firstname", "lastname", "age", "sex"]
+                 )
+                 st.dataframe(patients_df)
+
 
 if __name__ == "__main__":
     run()
