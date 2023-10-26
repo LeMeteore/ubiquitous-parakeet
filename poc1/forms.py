@@ -2,6 +2,7 @@ import streamlit as st
 from database import list_patients, list_plate_types, list_empty_plates
 
 # I should probably define the same thing but for other types of plates plan
+# I should generate this based on the type of plate or based on the nbr of cols & rows
 well_names = [
     "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12",
     "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12",
@@ -60,22 +61,22 @@ def plate_type_form():
                                   placeholder="Number of negatives",
                                   label_visibility="collapsed")
         with col5:
+            # if I pick weels for whites, I should update the remaning wells for pos & negs
+            # If I says there are 3 weels for whites, I should validate before returning
             wells_whites = st.multiselect("Location for whites",
                                           options=well_names,
                                           placeholder="Locations for whites",
-                                          max_selections=nb_whites,
                                           label_visibility="collapsed")
 
             wells_pos = st.multiselect("Location for positives",
                                        options=well_names,
                                        placeholder="Locations for positives",
-                                       max_selections=nb_pos,
                                        label_visibility="collapsed")
             wells_negs = st.multiselect("Location for negatives",
                                         options=well_names,
                                         placeholder="Location for for negatives",
-                                        max_selections=nb_negs,
                                         label_visibility="collapsed")
+
     return (type_, nb_cols, nb_rows,
             names_cols, names_rows,
             nb_whites, nb_pos, nb_negs,
