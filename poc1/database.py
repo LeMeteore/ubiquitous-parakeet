@@ -156,6 +156,15 @@ def insert_plate_patients(con, params):
         cur.executemany(query, params)
         con.commit()
 
+    # change status of the plate
+    query = """
+    update plates set status='filled' where eid= :peid
+    """
+    with contextlib.closing(con.cursor()) as cur:
+        cur.execute(query, {'peid': params[0][0]})
+        con.commit()
+
+
 def list_plate_patients(con, plate_eid, row_factory=None):
     if row_factory:
         con.row_factory = row_factory
