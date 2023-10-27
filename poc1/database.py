@@ -48,6 +48,8 @@ def init_connection(database_path):
 
     # create second table plate plans
     with contextlib.closing(con.cursor()) as cur:
+        # TODO, statuses should be empty, partially filled, filled, processed
+        # TODO, do not fill beyong max number of authorized patients per plate
         cur.execute("""
         create table if not exists plates(
         eid integer primary key,
@@ -109,6 +111,7 @@ def dict_factory(cursor, row):
 
 
 def list_plate_types(row_factory=None):
+    # TODO, harmonize functions and pass con parameter to all functions
     con = st.session_state.con
     if row_factory:
         con.row_factory = row_factory
@@ -152,6 +155,7 @@ def insert_plate_patients(con, params):
     )
     values (?, ?)
     """
+    # TODO, can I add a patient more than once inside a plate ?
     with contextlib.closing(con.cursor()) as cur:
         cur.executemany(query, params)
         con.commit()
