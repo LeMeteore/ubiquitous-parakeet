@@ -3,6 +3,8 @@ import streamlit as st
 import pathlib
 import io
 import altair as alt
+import math
+
 
 basedir = pathlib.Path(__file__).parent.parent.parent
 datadir = basedir / "data"
@@ -84,53 +86,86 @@ with st.form("my_form", clear_on_submit=True):
    with col1:
        input_file = st.file_uploader(
           "Input file",
-          type=["csv", "xls", "xlsx"],
-          help="Enter an Excel file containing your plaque"
+          type=["xls", "xlsx"],
+          help="Enter an Excel file containing your plate, the file should have a worksheet named 'Plan de plaque'."
        )
    with col2:
        output_file = st.file_uploader(
           "Output file",
-          type=["csv", "xls", "xlsx"],
-          help="Enter an Excel file containing results returned by the Spectrometer"
+          type=["xls", "xlsx"],
+          help="Enter an Excel file containing results returned by the Spectrometer, the file should have a worksheet named 'Résultats d'absorbance'."
        )
    submit_button_form = st.form_submit_button("Submit file")
    if submit_button_form:
       # transform input file to a list of patients
-      dfi = pd.read_excel(input_file, sheet_name="Plan de plaque")
+      try:
+         # read patients number as strings
+         dfi = pd.read_excel(input_file, sheet_name="Plan de plaque", dtype=str)
+      except ValueError as err:
+         if str(err) == "Worksheet named 'Plan de plaque' not found":
+            st.error("Please, reload page then as input file, upload Excel file containing a worksheet named 'Plan de plaque'")
+            s.stop()
+
       # ideal world, there is no empty cells inside the excel file
       # clean empty lines
       dfi.dropna(axis = 0, how = 'all', inplace=True)
       # clean empty cols
       dfi.dropna(axis = 1, how = 'all', inplace=True)
+      # this is the actual dataframe, rows and cols with something in it
       dfi = dfi.iloc[1:,1:]
+      # clean NaN cols again
+      dfi.dropna(axis = 1, how = 'all', inplace=True)
       # retrieve patients
       patients = []
       for column in dfi.columns:
+         # take element after element, column after column
          patients.extend(dfi[column].tolist())
-         # remove the last 3 elts of the list
+
+      # patients are everything until I find BLANC or keep everything except the nan values
+      # patients = [x for x in takewhile(lambda x: x!="BLANC", patients)]
+      # patients = [item for item in patients if not(math.isnan(item)) == True]
+      patients = [item for item in patients if isinstance(item, str) == True]
+      # blanc, neg, pos are the last 3
       patients = patients[:-3]
 
-      # open all the sheets
+      # open all the sheets from the output file
       output_xls = pd.ExcelFile(output_file)
       # retrieve each sheets
-      df_absorbance = pd.read_excel(output_xls, "Résultats d'absorbance")
+      try:
+         df_absorbance = pd.read_excel(output_xls, "Résultats d'absorbance")
+      except ValueError as err:
+         if str(err) == "Worksheet named 'Résultats d'absorbance' not found":
+            st.error("Please, reload page and for the output file, upload an Excel file containing a worksheet named 'Résultats d'absorbance'")
+            st.stop()
+
       df_données_brutes_450nm = pd.read_excel(output_xls, "Données brutes 450 nm")
       df_info_gen = pd.read_excel(output_xls, "Informations générales")
       df_journal_exec = pd.read_excel(output_xls, "Journal d'exécution")
 
       # retrieve wave length from 1st sheet
       wave_length = df_absorbance.iloc[3,1] # no need to .extract('(\d+)') ???
+      some_date_and_hour = df_absorbance.iloc[1,1]
       # extract actual absorbance data
       absorbance_data = df_absorbance.iloc[5:,1:]
+      # clean NaN cols again
+      absorbance_data.dropna(axis = 1, how = 'all', inplace=True)
+
       # transform the df to a list
       absorbance = []
       for column in absorbance_data.columns:
          absorbance.extend(absorbance_data[column].tolist())
 
-      # extract blanc, pos, neg
+      # keep everything except the nan values
+      absorbance = [item for item in absorbance if not(math.isnan(item)) == True]
+      # extract blanc, pos, neg, the last 3 of the column
       blanc, neg, pos = absorbance[-3:]
       # then remove them
       absorbance = absorbance[:-3]
+
+      # length of absorbance should be equal to length of patients
+      if len(absorbance) != len(patients):
+         st.error(f"The number of patients ({len(patients)}) does not equal the number of results ({len(absorbance)}). Call the police.")
+         st.stop()
       negative_control = [neg for _ in patients]
       positive_control = [pos for _ in patients]
       df_result = pd.DataFrame({
@@ -173,12 +208,12 @@ if "df_result" in st.session_state:
       st.success("Results processed successfully!")
       st.dataframe(
          st.session_state.df_styled,
-         column_config={
-            "Patients": st.column_config.NumberColumn(
-               "Patients",
-               help="Patients IDs",
-               format="%d",
-            )},
+         # column_config={
+         #    "Patients": st.column_config.NumberColumn(
+         #       "Patients",
+         #       help="Patients IDs",
+         #       format="%d",
+         #    )},
          hide_index=True,
       )
 
