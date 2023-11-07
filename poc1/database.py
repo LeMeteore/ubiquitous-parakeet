@@ -67,6 +67,7 @@ def init_connection(database_path):
         cur.execute("""
         create table if not exists patients(
         eid integer primary key,
+        anon_number text not null,
         firstname varchar(50) not null,
         lastname varchar(50) not null,
         age integer not null,

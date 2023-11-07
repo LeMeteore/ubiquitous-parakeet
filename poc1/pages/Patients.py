@@ -31,11 +31,11 @@ def patients():
             input_file = st.file_uploader(
                 "Input file",
                 type=["xls", "xlsx"],
-                help="Enter an Excel file containing patients list"
+                help="Enter an Excel file containing patients list, The column names should be: anon_number, firstname, lastname, age, sex"
             )
             submit_button_form = st.form_submit_button("Submit file")
             if submit_button_form and input_file:
-                columns = ["firstname", "lastname", "age", "sex"]
+                columns = ["anon_number", "firstname", "lastname", "age", "sex"]
                 dfp = pd.read_excel(input_file, sheet_name="Patients", header=None, names=columns)
                 now = datetime.datetime.now().strftime("%Y/%m/%d")
                 dfp["created"] = pd.Series([now] * dfp.shape[0])
@@ -48,6 +48,10 @@ def patients():
             # patient form
             c1, c2 = st.columns(2)
             with c2:
+                anon_number = st.text_input("patient_number",
+                                      placeholder="Anonymisation number",
+                                      label_visibility="collapsed")
+
                 firstname = st.text_input("Firstname",
                                       placeholder="Firstname",
                                       label_visibility="collapsed")
@@ -69,14 +73,14 @@ def patients():
 
             submit_button_form = st.form_submit_button("Submit")
             # submit only if all fields are filled ???
-            if submit_button_form and ( age and sex and lastname and firstname):
+            if submit_button_form and ( anon_number and age and sex and lastname and firstname):
                 con = st.session_state.con
                 now = datetime.datetime.now().strftime("%Y/%m/%d")
                 query = """
-                insert into patients(firstname, lastname, age, sex, created) values (?, ?, ?, ?, ?)
+                insert into patients(anon_number, firstname, lastname, age, sex, created) values (?, ?, ?, ?, ?, ?)
                 """
                 with contextlib.closing(con.cursor()) as cur:
-                    cur.execute(query, (firstname, lastname, age, sex, now))
+                    cur.execute(query, (anon_number, firstname, lastname, age, sex, now))
                     con.commit()
 
     # patient list
@@ -102,13 +106,19 @@ def patients():
             #
             ids_to_rm = edited_df[edited_df["Delete"]]["eid"]
             ids_to_rm = [(i,) for i in ids_to_rm]
+            # TODO: you can't remove a patient that is on a PCR plate
             delete = st.form_submit_button("Delete")
             if delete and len(ids_to_rm) != 0:
                 con = st.session_state.con
                 query = "delete from patients where eid = ?"
                 with contextlib.closing(con.cursor()) as cur:
-                    cur.executemany(query, ids_to_rm)
-                    con.commit()
+                    try:
+                        cur.executemany(query, ids_to_rm)
+                        con.commit()
+                    except sqlite3.IntegrityError as err:
+                        if str(err) == "FOREIGN KEY constraint failed":
+                            st.error("You can't delete a patient that is on a PCR plate")
+                            st.stop()
                 # https://docs.streamlit.io/library/api-reference/control-flow/st.rerun
                 rerun()
         now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
