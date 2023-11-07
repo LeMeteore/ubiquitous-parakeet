@@ -18,65 +18,74 @@ def plate_type_form():
     type_ = st.text_input("Type of the plate",
                           placeholder="Type of the plate",
                           label_visibility="collapsed")
+    fill_type = st.selectbox("Fill type",
+                             ("Column by column", "Row by row"),
+                             index=None,
+                             placeholder="How to fill the plate ?",
+                             label_visibility="collapsed")
+
     col1, col2 = st.columns(2)
     with col1:
+        st.write("Shape")
         nb_cols = st.number_input("Number of columns",
                                 step=1, min_value=1,
                                 value=None,
-                                placeholder="Number of columns",
+                                placeholder="12 columns",
                                 label_visibility="collapsed")
         nb_rows = st.number_input("Number of rows",
                                 step=1, min_value=1,
                                 value=None,
-                                placeholder="Number of rows",
+                                placeholder="8 rows",
                                 label_visibility="collapsed")
     with col2:
+        st.write("Naming")
         names_cols = st.selectbox("Columns naming scheme",
                                   ("Letters", "Numbers"),
                                   index=None,
-                                  placeholder="How to name the columns?",
+                                  placeholder="Named using digits",
                                   label_visibility="collapsed")
         names_rows = st.selectbox("Rows naming scheme",
                                   ("Letters", "Numbers"),
                                   index=None,
-                                  placeholder="How to name the rows?",
+                                  placeholder="Named using letters",
                                   label_visibility="collapsed")
 
 
-    col4, col5 = st.columns([1,3])
+    col4, col5 = st.columns(2)
     with col4:
+        st.write("Controls")
         nb_whites = st.number_input("Number of whites",
                                   step=1, min_value=1,
                                   value=None,
-                                  placeholder="Number of whites",
+                                  placeholder="Number of white controls ? Default 1",
                                   label_visibility="collapsed")
         nb_pos = st.number_input("Number of positives",
                                  step=1, min_value=1,
                                  value=None,
-                                 placeholder="Number of positives",
+                                 placeholder="Number of positive controls? Default 1",
                                  label_visibility="collapsed")
         nb_negs = st.number_input("Number of negatives",
                                   step=1, min_value=1,
                                   value=None,
-                                  placeholder="Number of negatives",
+                                  placeholder="Number of negative controls? Default 1",
                                   label_visibility="collapsed")
         with col5:
+            st.write("Controls Location")
             # TODO, same well cannot be picked for a white then for a negative or a positive
             # TODO, If I says there are 3 weels for whites, I should validate before returning
-            wells_whites = st.multiselect("Location for whites",
+            wells_whites = st.multiselect("White controls location",
                                           options=well_names,
-                                          placeholder="Locations for whites",
+                                          placeholder="White controls location? Default before positives",
                                           label_visibility="collapsed")
 
             wells_pos = st.multiselect("Location for positives",
                                        options=well_names,
-                                       placeholder="Locations for positives",
+                                       placeholder="Positive controls location? Default before negatives",
                                        label_visibility="collapsed")
             wells_negs = st.multiselect("Location for negatives",
                                         options=well_names,
-                                        placeholder="Location for for negatives",
+                                        placeholder="Location for for negatives? Default=last",
                                         label_visibility="collapsed")
-
     return (type_, nb_cols, nb_rows,
             names_cols, names_rows,
             nb_whites, nb_pos, nb_negs,
@@ -97,6 +106,7 @@ def plate_form():
     return type_, description
 
 def plate_patients_form():
+    # TODO, retrieve empty and partially filled plates
     empty_plates = dict(list_empty_plates())
     # TODO, retrieve patients that are not in the current plate
     patients = dict(list_patients())
