@@ -5,6 +5,7 @@ import datetime
 import contextlib
 from database import init_connection, database_path
 from utils import convert_to_excel
+import altair as alt
 
 try:
     from streamlit import rerun as rerun
@@ -131,6 +132,15 @@ def patients():
             mime="application/vnd.ms-excel",
             key='download-csv'
         )
+
+    with st.expander("See plot"):
+        st.write("Plot:")
+        con = st.session_state.con
+        df = pd.read_sql("SELECT anon_number, age, sex from patients", st.session_state.con)
+        # TODO: age, age mean & distribution
+        st.bar_chart(df, x="anon_number", y="age")
+
+
 
 if __name__ == "__main__":
     patients()
