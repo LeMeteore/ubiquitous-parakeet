@@ -1,41 +1,60 @@
-# productive-voice
+# Introduction
 
+## 1.1 Purpose
 
+The purpose of this document is to build an online system to automate the mapping of each result returned by a spectrophotometer to the correct patient, build a recap, draw some charts.
 
+## 1.2 Intended Audience:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+The intended and primary audience of this document are all the people at IPD labs dealing with PCR plate plans, all the people at the DDSI. This document will be written with no technical terms (_hopefully_) for the benefit of everyone on the team. It will define the business rules of this application.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## 1.3 Scope:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+One of the chore at the IPD immunology lab is (_among other things_) to get the results returned by their [spectrophotometer](https://www.thermofisher.com/sn/en/home/life-science/lab-equipment/microplate-instruments/plate-readers/models/multiskan-skyhigh.html) and for each result, retrieve what is the associated patient. The patients samples are retrieved from a [96 wells PCR plate](https://www.azenta.com/products/96-well-skirted-pcr-plate). This task is actually done manually, using Excel files. the current project will try to ease this process.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+# Overall Description of the product
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+The system stores the following informations:
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+- Patients (firstname, lastname, date of birth, sex,)
+- PCR plate plans (name, shape, size, controls, patients list)
+- PCR plate associated results 
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## 2.1 User Needs
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+The user of the system should be able to do the following: 
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+- Register patients using an Excel files
+- Register one patient using a form
+- Create a PCR plate using a form 
+- Add a patient or a control inside a PCR plate
+- Map spectrophotometer results to a PCR plate plan
+- Download results
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+## 2.2 Assumptions and Dependencies
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+# System Features and Requirements
 
-## License
-For open source projects, say how it is licensed.
+Forms... Tables.... Charts... Submit & Download buttons... Everywhere...
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## 3.1 Functional Requirements
+
+This project is a proof of conept built to quickly iterate and validate the desired features. In the long run, the system will be broken and rebuilt in 3 parts:
+
+- A frontend
+- A backend
+- A database 
+
+## Installation and Usage:
+
+To run the project locally, one may want to :
+
+- git clone the repository: `git clone ...`
+- cd into the repository `cd ...`
+- create a Python virtualenv `python -m venv .env`
+- activate the Python virtualenv `source .env/bin/activate`
+- install Dependencies: `pip install -r requirements.txt`
+- go inside the poc directory then: `streamlit run application.py`
+- open a web browser and visit the following url: `http://localhost:8501`
+
+For those afraid by the command line, a not yet fully working PoC is available [here](https://applicationpy-nsk3kpmtdwb9azmg9o7gra.streamlit.app/Process_results)
