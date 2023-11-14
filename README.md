@@ -29,6 +29,7 @@ The user of the system should be able to do the following:
 - Create a PCR plate using a form 
 - Add a patient or a control inside a PCR plate
 - Map spectrophotometer results to a PCR plate plan
+- Draw some charts 
 - Download results
 
 # System Features and Requirements
@@ -56,3 +57,4 @@ To run the project locally, one may want to :
 - open a web browser and visit the following url: `http://localhost:8501`
 
 For those afraid by the command line, a not yet fully working PoC is available [here](https://applicationpy-nsk3kpmtdwb9azmg9o7gra.streamlit.app/Process_results)
+
