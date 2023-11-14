@@ -31,8 +31,6 @@ The user of the system should be able to do the following:
 - Map spectrophotometer results to a PCR plate plan
 - Download results
 
-## 2.2 Assumptions and Dependencies
-
 # System Features and Requirements
 
 Forms... Tables.... Charts... Submit & Download buttons... Everywhere...
