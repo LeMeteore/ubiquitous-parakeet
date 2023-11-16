@@ -68,9 +68,9 @@ def apply_formatting(col):
 
 # for this type of plaque, blanc, neg, pos doesn't need to be in the DF
 # for this type of plaque, blanc, neg, pos are the last elts of the last column
-blanc = 0.047
-neg = 0.052
-pos = 1.442
+# blanc = 0.047
+# neg = 0.052
+# pos = 1.442
 # souds like 96 puits & wave_length are attributes for this type of plaque (or this type of exam)
 model = 96
 wave_length = 450
@@ -125,7 +125,11 @@ with st.form("my_form", clear_on_submit=True):
       # patients = [x for x in takewhile(lambda x: x!="BLANC", patients)]
       # patients = [item for item in patients if not(math.isnan(item)) == True]
       patients = [item for item in patients if isinstance(item, str) == True]
+
       # blanc, neg, pos are the last 3
+      controls_identifiers = patients[-3:]
+
+      # samples are everything except the last 3
       patients = patients[:-3]
 
       # open all the sheets from the output file
@@ -157,8 +161,16 @@ with st.form("my_form", clear_on_submit=True):
 
       # keep everything except the nan values
       absorbance = [item for item in absorbance if not(math.isnan(item)) == True]
-      # extract blanc, pos, neg, the last 3 of the column
-      blanc, neg, pos = absorbance[-3:]
+
+      # extract controls, the last 3 of the column
+      controls_values = absorbance[-3:]
+
+      # define which one is white ? which one is neg ? which one is pos ?
+      controls_dict = dict(zip(controls_identifiers, controls_values))
+      blanc = controls_dict.get("BLANC")
+      neg = controls_dict.get("NEG")
+      pos = controls_dict.get("POS")
+
       # then remove them
       absorbance = absorbance[:-3]
 
