@@ -37,7 +37,6 @@ def convert_to_csv(df):
 # UnhashableParamError: Cannot hash argument 'df' (of type pandas.io.formats.style.Styler) in 'convert_df'.
 # To address this, you can tell Streamlit not to hash this argument by adding a leading underscore to
 # the argument's name in the function signature:
-@st.cache_data
 def convert_to_excel(_df):
     buffer = io.BytesIO()
     with pd.ExcelWriter(buffer) as writer:
