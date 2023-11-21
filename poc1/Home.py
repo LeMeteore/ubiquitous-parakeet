@@ -4,7 +4,6 @@ from database import init_connection, database_path
 st.set_page_config(
     page_title="Home page",
     layout="wide",
-    initial_sidebar_state="collapsed",
     menu_items=None,
 )
 
@@ -13,12 +12,14 @@ if "con" not in st.session_state:
     st.sesstion_state = con
 
 def run():
-    st.write("# Welcome :tulip::cherry_blossom::rose::hibiscus::sunflower::blossom:")
+    st.write("# Welcome :scientist:")
 
-    multi = '''This is a proof of concept built to help for the management of [PCR plate plans](#).
+    multi = '''
+This is a proof of concept built _specifically_ for the scientists at the immunology lab to help them for the management of their [PCR plate plans](#).
 
+The primary objective is, for each performed test, map **the results** returned by the spectrophotometer, to **the samples** contained inside the PCR plate plans.
 
-Keep in mind, this is a :red[pre-alpha version], the software is :red[still being designed and built], the software should not be released to the public yet.
+Keep in mind, the software is :red[still a work in progress], the software should not be released to the public yet.
 
 To find more informations, please, follow this [link](#)
     '''
